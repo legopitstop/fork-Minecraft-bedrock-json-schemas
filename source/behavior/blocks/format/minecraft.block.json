@@ -14,6 +14,7 @@
       "additionalProperties": true,
       "properties": {
         //Components
+        "minecraft:chest_obstruction": { "$ref": "./components/chest_obstruction.json" },
         "minecraft:collision_box": { "$ref": "./components/collision_box.json" },
         "minecraft:connection_rule": { "$ref": "./components/connection_rule.json" },
         "minecraft:crafting_table": { "$ref": "./components/crafting_table.json" },
@@ -96,7 +97,8 @@
       "properties": {
         "minecraft:connection": { "$ref": "./traits/connection.json" },
         "minecraft:placement_direction": { "$ref": "./traits/placement_direction.json" },
-        "minecraft:placement_position": { "$ref": "./traits/placement_position.json" }
+        "minecraft:placement_position": { "$ref": "./traits/placement_position.json" },
+        "minecraft:multi_block": { "$ref": "./traits/multi_block.json" }
       }
     }
   },

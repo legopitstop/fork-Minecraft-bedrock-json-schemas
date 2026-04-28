@@ -2,6 +2,9 @@
   "$schema": "http://json-schema.org/draft-07/schema",
   "title": "Minecraft JSON UI",
   "type": "object",
+  "propertyNames": {
+    "$ref": "#/definitions/element-key"
+  },
   "properties": {
     "namespace": {
       "title": "Namespace",
@@ -16,7 +19,7 @@
       "description": "An animation is a set of keyframes that can be applied to an element.",
       "additionalProperties": false,
       "patternProperties": {
-        "^\\$.*": {
+        "^\\$[a-zA-Z0-9_.-]+(\\|.*)?$": {
           "$ref": "./general/variables.json"
         }
       },
@@ -40,7 +43,12 @@
         "scale_from_starting_alpha": { "$ref": "./elements/properties/scale_from_starting_alpha.json" },
         "to": { "$ref": "./elements/properties/to.json" },
         "uv": { "$ref": "./elements/properties/uv.json" },
-        "uv_size": { "$ref": "./elements/properties/uv_size.json" }
+        "uv_size": { "$ref": "./elements/properties/uv_size.json" },
+        "reset_event": { "$ref": "./elements/properties/reset_event.json" },
+        "resettable": { "$ref": "./elements/properties/resettable.json" },
+        "activated": { "$ref": "./elements/properties/activated.json" },
+        "start_event": { "$ref": "./elements/properties/start_event.json" },
+        "orientation": { "$ref": "./elements/properties/orientation.json" }
       }
     },
     "control": {
@@ -48,11 +56,19 @@
       "description": "An element is a control that can be added to a screen. It can be a button, a label, an image, etc.",
       "type": "object",
       "propertyNames": {
-        "examples": ["$variable"]
+        "anyOf": [
+          {
+            "title": "Property Name",
+            "description": "A known UI element property name.",
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_]+$"
+          },
+          { "$ref": "#/definitions/variable-key" }
+        ]
       },
       "additionalProperties": false,
       "patternProperties": {
-        "^\\$.*": {
+        "^\\$[a-zA-Z0-9_.-]+(\\|.*)?$": {
           "$ref": "./general/variables.json"
         }
       },
@@ -64,6 +80,10 @@
             {
               "type": "array",
               "items": {
+                "type": "object",
+                "propertyNames": {
+                  "$ref": "#/definitions/element-key"
+                },
                 "additionalProperties": {
                   "title": "Sub Element",
                   "$ref": "#/definitions/grouped-ui"
@@ -127,6 +147,9 @@
                             "items": {
                               "title": "Control",
                               "type": "object",
+                              "propertyNames": {
+                                "$ref": "#/definitions/element-key"
+                              },
                               "additionalProperties": {
                                 "$ref": "#/definitions/grouped-ui"
                               }
@@ -136,6 +159,9 @@
                             "title": "Control",
                             "description": "A control.",
                             "type": "object",
+                            "propertyNames": {
+                              "$ref": "#/definitions/element-key"
+                            },
                             "additionalProperties": {
                               "$ref": "#/definitions/grouped-ui"
                             }
@@ -205,6 +231,9 @@
                         "items": {
                           "title": "Control",
                           "type": "object",
+                          "propertyNames": {
+                            "$ref": "#/definitions/element-key"
+                          },
                           "additionalProperties": {
                             "$ref": "#/definitions/grouped-ui"
                           }
@@ -214,6 +243,9 @@
                         "title": "Control",
                         "description": "A control.",
                         "type": "object",
+                        "propertyNames": {
+                          "$ref": "#/definitions/element-key"
+                        },
                         "additionalProperties": {
                           "$ref": "#/definitions/grouped-ui"
                         }
@@ -238,6 +270,7 @@
         "always_handle_pointer": { "$ref": "./elements/properties/always_handle_pointer.json" },
         "always_handle_scrolling": { "$ref": "./elements/properties/always_handle_scrolling.json" },
         "always_listen_to_input": { "$ref": "./elements/properties/always_listen_to_input.json" },
+        "always_listening": { "$ref": "./elements/properties/always_listening.json" },
         "always_rotate": { "$ref": "./elements/properties/always_rotate.json" },
         "anchor_from": { "$ref": "./elements/properties/anchor_from.json" },
         "anchor_to": { "$ref": "./elements/properties/anchor_to.json" },
@@ -257,6 +290,7 @@
         "checked_locked_hover_control": { "$ref": "./elements/properties/checked_locked_hover_control.json" },
         "clip_direction": { "$ref": "./elements/properties/clip_direction.json" },
         "clip_pixelperfect": { "$ref": "./elements/properties/clip_pixelperfect.json" },
+        "clip_ratio": { "$ref": "./elements/properties/clip_ratio.json" },
         "clips_children": { "$ref": "./elements/properties/clips_children.json" },
         "close_on_player_hurt": { "$ref": "./elements/properties/close_on_player_hurt.json" },
         "collection_index": { "$ref": "./elements/properties/collection_index.json" },
@@ -271,6 +305,7 @@
         "consume_hover_events": { "$ref": "./elements/properties/consume_hover_events.json" },
         "contained": { "$ref": "./elements/properties/contained.json" },
         "control_name": { "$ref": "./elements/properties/control_name.json" },
+        "debug": { "$ref": "./elements/properties/debug.json" },
         "default_control": { "$ref": "./elements/properties/default_control.json" },
         "default_focus_precedence": { "$ref": "./elements/properties/default_focus_precedence.json" },
         "disable_anim_fast_forward": { "$ref": "./elements/properties/disable_anim_fast_forward.json" },
@@ -321,6 +356,7 @@
         "inherit_max_sibling_height": { "$ref": "./elements/properties/inherit_max_sibling_height.json" },
         "inherit_max_sibling_width": { "$ref": "./elements/properties/inherit_max_sibling_width.json" },
         "is_modal": { "$ref": "./elements/properties/is_modal.json" },
+        "is_new_nine_slice": { "$ref": "./elements/properties/is_new_nine_slice.json" },
         "is_showing_menu": { "$ref": "./elements/properties/is_showing_menu.json" },
         "jump_to_bottom_on_update": { "$ref": "./elements/properties/jump_to_bottom_on_update.json" },
         "keep_ratio": { "$ref": "./elements/properties/keep_ratio.json" },
@@ -353,6 +389,7 @@
         "render_game_behind": { "$ref": "./elements/properties/render_game_behind.json" },
         "render_only_when_topmost": { "$ref": "./elements/properties/render_only_when_topmost.json" },
         "renderer": { "$ref": "./elements/properties/renderer.json" },
+        "replaced_while_inactive": { "$ref": "./elements/properties/replaced_while_inactive.json" },
         "reset_event": { "$ref": "./elements/properties/reset_event.json" },
         "reset_on_focus_lost": { "$ref": "./elements/properties/reset_on_focus_lost.json" },
         "rotate_speed": { "$ref": "./elements/properties/rotate_speed.json" },
@@ -391,11 +428,14 @@
           "$ref": "./elements/properties/text_edit_box_grid_collection_name.json"
         },
         "text_labels": { "$ref": "./elements/properties/text_labels.json" },
+        "text_tts": { "$ref": "./elements/properties/text_tts.json" },
         "text_type": { "$ref": "./elements/properties/text_type.json" },
         "text": { "$ref": "./elements/properties/text.json" },
+        "nineslice_size": { "$ref": "./elements/properties/nineslice_size.json" },
         "texture_file_system": { "$ref": "./elements/properties/texture_file_system.json" },
         "texture": { "$ref": "./elements/properties/texture.json" },
         "tiled": { "$ref": "./elements/properties/tiled.json" },
+        "tiled_scale": { "$ref": "./elements/properties/tiled_scale.json" },
         "toggle_default_state": { "$ref": "./elements/properties/toggle_default_state.json" },
         "toggle_grid_collection_name": { "$ref": "./elements/properties/toggle_grid_collection_name.json" },
         "toggle_group_default_selected": { "$ref": "./elements/properties/toggle_group_default_selected.json" },
@@ -432,7 +472,26 @@
         "variables": { "$ref": "./elements/properties/variables.json" },
         "virtual_keyboard_buffer_control": { "$ref": "./elements/properties/virtual_keyboard_buffer_control.json" },
         "visible": { "$ref": "./elements/properties/visible.json" },
-        "zip_folder": { "$ref": "./elements/properties/zip_folder.json" }
+        "zip_folder": { "$ref": "./elements/properties/zip_folder.json" },
+        "gesture_tracking_button": { "$ref": "./elements/properties/gesture_tracking_button.json" },
+        "always_handle_controller_direction": { "$ref": "./elements/properties/always_handle_controller_direction.json" },
+        "secondary_color": { "$ref": "./elements/properties/secondary_color.json" },
+        "always_accepts_input": { "$ref": "./elements/properties/always_accepts_input.json" },
+        "place_holder_text_hover_color": { "$ref": "./elements/properties/place_holder_text_hover_color.json" },
+        "hover_text_max_width": { "$ref": "./elements/properties/hover_text_max_width.json" },
+        "full_storage_color": { "$ref": "./elements/properties/full_storage_color.json" },
+        "scrollbar_always_visible": { "$ref": "./elements/properties/scrollbar_always_visible.json" },
+        "tts_skip_message": { "$ref": "./elements/properties/tts_skip_message.json" },
+        "follows_cursor": { "$ref": "./elements/properties/follows_cursor.json" },
+        "gamepad_cursor": { "$ref": "./elements/properties/gamepad_cursor.json" },
+        "next_sub_page_button_name": { "$ref": "./elements/properties/next_sub_page_button_name.json" },
+        "prev_sub_page_button_name": { "$ref": "./elements/properties/prev_sub_page_button_name.json" },
+        "tooltip_name": { "$ref": "./elements/properties/tooltip_name.json" },
+        "tooltip_top_content_control": { "$ref": "./elements/properties/tooltip_top_content_control.json" },
+        "tooltip_bottom_content_control": { "$ref": "./elements/properties/tooltip_bottom_content_control.json" },
+        "tooltip_area": { "$ref": "./elements/properties/tooltip_area.json" },
+        "tooltip_tts_value": { "$ref": "./elements/properties/tooltip_tts_value.json" },
+        "consume_event": { "$ref": "./elements/properties/consume_event.json" }
       },
       "dependencies": {
         "line_padding": { "properties": { "type": { "const": "label" } } },
@@ -451,11 +510,19 @@
       "title": "Control Factory",
       "type": "object",
       "propertyNames": {
-        "examples": ["$variable"]
+        "anyOf": [
+          {
+            "title": "Property Name",
+            "description": "A known UI element property name.",
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_]+$"
+          },
+          { "$ref": "#/definitions/variable-key" }
+        ]
       },
       "additionalProperties": false,
       "patternProperties": {
-        "^\\$.*": {
+        "^\\$[a-zA-Z0-9_.-]+(\\|.*)?$": {
           "$ref": "./general/variables.json"
         }
       },
@@ -467,8 +534,19 @@
           "enum": ["factory"]
         },
         "control_ids": { "$ref": "./elements/properties/control_ids.json" },
-        "control_name": { "$ref": "./elements/properties/control_name.json" }
+        "control_name": { "$ref": "./elements/properties/control_name.json" },
+        "size": { "$ref": "./elements/properties/size.json" }
       }
+    },
+    "element-key": {
+      "$ref": "./general/element_name.json"
+    },
+    "variable-key": {
+      "title": "Variable Name",
+      "description": "A variable definition key using the $ prefix, optionally with a default value after |.",
+      "type": "string",
+      "pattern": "^\\$[a-zA-Z0-9_.\\-]+(\\|.*)?$",
+      "examples": ["$variable", "$my_var|default", "$button.action"]
     },
     "grouped-ui": {
       "$schema": "http://json-schema.org/draft-07/schema",
